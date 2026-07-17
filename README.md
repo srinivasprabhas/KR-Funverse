@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KR Funverse — Website
 
-## Getting Started
+An interactive, animated marketing site for **KR Funverse**, a go-karting, box
+cricket and indoor-games arena in Ghatkesar, Hyderabad.
 
-First, run the development server:
+Built with **Next.js 16 (App Router) + TypeScript**, **Tailwind CSS v4** and
+**Framer Motion** (the `motion` package).
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+npm start        # serve the production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Requires Node.js 20.9+.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✏️ Editing the content (important)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**All site copy, contact details, pricing, hours, attractions, stats, gallery
+images and testimonials live in one file:**
 
-## Learn More
+> `src/data/site.ts`
 
-To learn more about Next.js, take a look at the following resources:
+Verified facts (name, tagline, the three activities, area, phone, Instagram) are
+already filled in. Blocks marked **`PLACEHOLDER`** in that file — pricing,
+opening hours, stats, and testimonials — are illustrative defaults. **Replace
+them with real values from the owner before going live.**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Home** (`src/app/page.tsx`) — one immersive scrolling page: hero, marquee,
+  about, filterable attractions, animated stats, rate card, safety, events,
+  gallery, testimonials, location + map, and a booking/enquiry section.
+- **Sub-pages** — `/attractions`, `/pricing`, `/gallery`, `/book`.
+- **Enquiry API** — `src/app/api/enquiry/route.ts`. It currently logs submissions
+  server-side; wire it to email / a sheet / a CRM where the `TODO` comment is.
+- **Images** — `public/images/` (free-licensed Pexels stock; swap for real venue
+  photos when available).
 
-## Deploy on Vercel
+## Booking / contact
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The site uses floating **WhatsApp** and **click-to-call** buttons plus an
+enquiry form. Phone/WhatsApp/Instagram are all read from `src/data/site.ts`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+
+- Fully responsive and honors the OS "reduce motion" setting.
+- Dark motorsport theme; design tokens live in `src/app/globals.css`.
