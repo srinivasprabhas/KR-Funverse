@@ -1,8 +1,9 @@
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 import { site } from "@/data/site";
 
-/** Tiny className joiner (keeps deps minimal). */
-export function cn(...classes: Array<string | false | null | undefined>): string {
-  return classes.filter(Boolean).join(" ");
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }
 
 /** Build a WhatsApp deep-link with an optional prefilled message. */
