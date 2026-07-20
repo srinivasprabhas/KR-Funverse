@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter } from "next/font/google";
-import "./globals.css";
+import { Bebas_Neue, Inter, Geist } from "next/font/google";
+import "../globals.css";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
 import { site } from "@/data/site";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const bebas = Bebas_Neue({
   weight: "400",
@@ -62,7 +65,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${bebas.variable} ${inter.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", bebas.variable, inter.variable, "font-sans", geist.variable)}
     >
       <body className="flex min-h-full flex-col bg-ink text-chalk">
         <Providers>
