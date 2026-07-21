@@ -5,7 +5,10 @@ import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Money } from "@/components/dashboard/money";
-import { SlotStatusBadge } from "@/components/dashboard/status-badge";
+import {
+  StateBadge,
+  type SlotState,
+} from "@/components/dashboard/status-badge";
 import { endTimeOf, formatTime } from "@/lib/dashboard/availability";
 import { balanceOf, type Booking } from "@/lib/dashboard/types";
 import { cn } from "@/lib/utils";
@@ -36,21 +39,23 @@ export function SlotCard({
   // doesn't read as a duplicate booking.
   const isContinuation = Boolean(booking && booking.startTime !== startTime);
 
-  // A thin left border carries the state: amber still owes money, green is
-  // settled, neutral is sellable. Border only — no fills, no glows.
-  const stateBorder = !booked
-    ? "border-l-status-open/40"
-    : balance > 0
-      ? "border-l-status-due"
-      : "border-l-status-paid";
+  // The badge carries the state; the card itself stays neutral.
+  const state: SlotState = !booking
+    ? "open"
+    : booking.status === "cancelled"
+      ? "missed"
+      : isContinuation
+        ? "progress"
+        : booking.status === "completed"
+          ? "done"
+          : balance > 0
+            ? "pending"
+            : "confirmed";
 
   return (
     <Card
       className={cn(
-        "gap-0 border-l-2 py-0 transition-colors",
-        stateBorder,
-        // Continuation cells read as secondary to the slot that owns them.
-        isContinuation && "border-l-status-open/50",
+        "gap-0 py-0 transition-colors",
         booked ? "bg-muted/40" : "border-dashed hover:border-solid hover:bg-accent/40"
       )}
     >
@@ -64,7 +69,7 @@ export function SlotCard({
               to {formatTime(endTimeOf(startTime, durationMin))}
             </span>
           </div>
-          <SlotStatusBadge booked={booked} continuation={isContinuation} />
+          <StateBadge state={state} />
         </div>
 
         <div className="text-xs text-muted-foreground">{courtName}</div>

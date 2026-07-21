@@ -178,9 +178,14 @@ body:not([data-app="admin"]) ::-webkit-scrollbar-thumb {
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
-  --color-status-open: var(--status-open);
   --color-status-due: var(--status-due);
   --color-status-paid: var(--status-paid);
+  --color-state-open: var(--state-open);
+  --color-state-pending: var(--state-pending);
+  --color-state-confirmed: var(--state-confirmed);
+  --color-state-progress: var(--state-progress);
+  --color-state-done: var(--state-done);
+  --color-state-missed: var(--state-missed);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -232,10 +237,17 @@ body:not([data-app="admin"]) ::-webkit-scrollbar-thumb {
   --border: oklch(0.916 0.012 265);
   --input: oklch(0.9 0.015 265);
   --ring: oklch(0.55 0.15 268);
-  /* Booking state accents — used as thin borders and small icons only. */
-  --status-open: oklch(0.62 0.03 265);
+  /* Money accents on stat cards. */
   --status-due: oklch(0.62 0.13 75);
   --status-paid: oklch(0.55 0.12 155);
+  /* Slot / booking lifecycle. Each is used as badge text over the same colour
+     at 12% — every pair clears 4.5:1. Hues are spread for separation. */
+  --state-open: oklch(0.49 0.13 150); /* available — green */
+  --state-pending: oklch(0.51 0.13 75); /* awaiting payment — amber */
+  --state-confirmed: oklch(0.5 0.1 215); /* secured — teal */
+  --state-progress: oklch(0.53 0.16 340); /* running now — magenta */
+  --state-done: oklch(0.5 0.015 265); /* finished — grey */
+  --state-missed: oklch(0.5 0.18 25); /* cancelled / no-show — red */
   /* Categorical chart palette (light steps). Validated for colour-vision
      separation and contrast against the light surface — see chart usage in the
      admin dashboard. Slots are assigned in fixed order, never cycled. */
@@ -247,13 +259,13 @@ body:not([data-app="admin"]) ::-webkit-scrollbar-thumb {
   --radius: 0.625rem;
   /* Dark navy in light mode too — the classic admin shell. Same hue family as
      primary but darker, so the nav reads as a distinct surface. */
-  --sidebar: oklch(0.27 0.055 265);
+  --sidebar: oklch(0.22 0.035 260);
   --sidebar-foreground: oklch(0.955 0.012 265);
-  --sidebar-primary: oklch(0.72 0.13 265);
-  --sidebar-primary-foreground: oklch(0.24 0.06 265);
-  --sidebar-accent: oklch(0.345 0.065 265);
+  --sidebar-primary: oklch(0.7 0.13 262);
+  --sidebar-primary-foreground: oklch(0.22 0.06 262);
+  --sidebar-accent: oklch(0.32 0.05 260);
   --sidebar-accent-foreground: oklch(0.985 0.008 265);
-  --sidebar-border: oklch(0.45 0.06 265);
+  --sidebar-border: oklch(0.4 0.04 260);
   --sidebar-ring: oklch(0.7 0.13 262);
 }
 
@@ -276,9 +288,15 @@ body:not([data-app="admin"]) ::-webkit-scrollbar-thumb {
   --border: oklch(0.75 0.05 265 / 14%);
   --input: oklch(0.75 0.05 265 / 22%);
   --ring: oklch(0.6 0.15 268);
-  --status-open: oklch(0.55 0.03 265);
   --status-due: oklch(0.7 0.13 75);
   --status-paid: oklch(0.65 0.12 155);
+  /* Same six hues, re-stepped for the dark surface. */
+  --state-open: oklch(0.76 0.13 150);
+  --state-pending: oklch(0.78 0.13 75);
+  --state-confirmed: oklch(0.74 0.1 215);
+  --state-progress: oklch(0.75 0.14 340);
+  --state-done: oklch(0.72 0.02 265);
+  --state-missed: oklch(0.7 0.16 25);
   /* Same four hues re-stepped for the dark surface — a selected dark palette,
      not an automatic flip of the light one. */
   --chart-1: #3987e5; /* blue */
@@ -286,13 +304,13 @@ body:not([data-app="admin"]) ::-webkit-scrollbar-thumb {
   --chart-3: #d55181; /* magenta */
   --chart-4: #c98500; /* yellow */
   --chart-5: #9ca3af; /* neutral — reserved for "Other" */
-  --sidebar: oklch(0.205 0.04 265);
+  --sidebar: oklch(0.19 0.02 260);
   --sidebar-foreground: oklch(0.955 0.012 265);
-  --sidebar-primary: oklch(0.7 0.13 265);
-  --sidebar-primary-foreground: oklch(0.22 0.06 265);
-  --sidebar-accent: oklch(0.285 0.05 265);
+  --sidebar-primary: oklch(0.7 0.13 262);
+  --sidebar-primary-foreground: oklch(0.2 0.06 262);
+  --sidebar-accent: oklch(0.3 0.045 260);
   --sidebar-accent-foreground: oklch(0.985 0.008 265);
-  --sidebar-border: oklch(0.4 0.05 265);
+  --sidebar-border: oklch(0.38 0.035 260);
   --sidebar-ring: oklch(0.66 0.13 262);
 }
 
