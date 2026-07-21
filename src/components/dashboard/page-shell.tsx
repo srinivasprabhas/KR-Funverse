@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 
 /**
  * Standard page frame: sticky header with the sidebar trigger, a title block,
@@ -26,6 +27,9 @@ export function PageShell({
           className="mr-1 data-vertical:h-4 data-vertical:self-auto"
         />
         <span className="truncate text-sm font-medium">{title}</span>
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
       </header>
 
       <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">

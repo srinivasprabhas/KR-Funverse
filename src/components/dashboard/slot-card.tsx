@@ -36,10 +36,21 @@ export function SlotCard({
   // doesn't read as a duplicate booking.
   const isContinuation = Boolean(booking && booking.startTime !== startTime);
 
+  // A thin left border carries the state: amber still owes money, green is
+  // settled, neutral is sellable. Border only — no fills, no glows.
+  const stateBorder = !booked
+    ? "border-l-status-open/40"
+    : balance > 0
+      ? "border-l-status-due"
+      : "border-l-status-paid";
+
   return (
     <Card
       className={cn(
-        "gap-0 py-0 transition-colors",
+        "gap-0 border-l-2 py-0 transition-colors",
+        stateBorder,
+        // Continuation cells read as secondary to the slot that owns them.
+        isContinuation && "border-l-status-open/50",
         booked ? "bg-muted/40" : "border-dashed hover:border-solid hover:bg-accent/40"
       )}
     >

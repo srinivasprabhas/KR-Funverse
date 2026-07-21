@@ -58,19 +58,20 @@ body[data-app="admin"] {
   color: var(--foreground);
 }
 
-::selection {
+/* Brand selection + scrollbar are scoped to the marketing shell. The admin app
+   keeps the browser defaults — the racing red clashes with its navy chrome. */
+body:not([data-app="admin"]) ::selection {
   background: var(--color-racing);
   color: #fff;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
+body:not([data-app="admin"]) ::-webkit-scrollbar {
   width: 10px;
 }
-::-webkit-scrollbar-track {
+body:not([data-app="admin"]) ::-webkit-scrollbar-track {
   background: var(--color-ink);
 }
-::-webkit-scrollbar-thumb {
+body:not([data-app="admin"]) ::-webkit-scrollbar-thumb {
   background: linear-gradient(var(--color-racing), var(--color-racing-dark));
   border-radius: 999px;
 }
@@ -177,6 +178,9 @@ body[data-app="admin"] {
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+  --color-status-open: var(--status-open);
+  --color-status-due: var(--status-due);
+  --color-status-paid: var(--status-paid);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -211,18 +215,27 @@ body[data-app="admin"] {
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  /* Indigo-leaning blue. Held at hue 268 deliberately: --chart-1 sits at 255,
+     and moving primary closer makes the two blues indistinguishable in dark
+     mode. White on this is 8.45:1. */
+  --primary: oklch(0.42 0.16 268);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* Neutrals carry a 0.008-0.032 chroma tint at hue 265 — enough to kill the
+     stark grey, too little to read as "coloured". */
+  --secondary: oklch(0.968 0.008 265);
+  --secondary-foreground: oklch(0.25 0.035 265);
+  --muted: oklch(0.968 0.008 265);
+  --muted-foreground: oklch(0.535 0.022 265);
+  --accent: oklch(0.955 0.016 265);
+  --accent-foreground: oklch(0.3 0.06 265);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.916 0.012 265);
+  --input: oklch(0.9 0.015 265);
+  --ring: oklch(0.55 0.15 268);
+  /* Booking state accents — used as thin borders and small icons only. */
+  --status-open: oklch(0.62 0.03 265);
+  --status-due: oklch(0.62 0.13 75);
+  --status-paid: oklch(0.55 0.12 155);
   /* Categorical chart palette (light steps). Validated for colour-vision
      separation and contrast against the light surface — see chart usage in the
      admin dashboard. Slots are assigned in fixed order, never cycled. */
@@ -232,35 +245,40 @@ body[data-app="admin"] {
   --chart-4: #eda100; /* yellow */
   --chart-5: #6b7280; /* neutral — reserved for "Other" */
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Dark navy in light mode too — the classic admin shell. Same hue family as
+     primary but darker, so the nav reads as a distinct surface. */
+  --sidebar: oklch(0.27 0.055 265);
+  --sidebar-foreground: oklch(0.955 0.012 265);
+  --sidebar-primary: oklch(0.72 0.13 265);
+  --sidebar-primary-foreground: oklch(0.24 0.06 265);
+  --sidebar-accent: oklch(0.345 0.065 265);
+  --sidebar-accent-foreground: oklch(0.985 0.008 265);
+  --sidebar-border: oklch(0.45 0.06 265);
+  --sidebar-ring: oklch(0.7 0.13 262);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: oklch(0.155 0.012 265);
+  --foreground: oklch(0.985 0.004 265);
+  --card: oklch(0.212 0.016 265);
+  --card-foreground: oklch(0.985 0.004 265);
+  --popover: oklch(0.212 0.016 265);
+  --popover-foreground: oklch(0.985 0.004 265);
+  --primary: oklch(0.52 0.175 268);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.278 0.022 265);
+  --secondary-foreground: oklch(0.985 0.004 265);
+  --muted: oklch(0.278 0.022 265);
+  --muted-foreground: oklch(0.715 0.024 265);
+  --accent: oklch(0.3 0.032 265);
+  --accent-foreground: oklch(0.985 0.004 265);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: oklch(0.75 0.05 265 / 14%);
+  --input: oklch(0.75 0.05 265 / 22%);
+  --ring: oklch(0.6 0.15 268);
+  --status-open: oklch(0.55 0.03 265);
+  --status-due: oklch(0.7 0.13 75);
+  --status-paid: oklch(0.65 0.12 155);
   /* Same four hues re-stepped for the dark surface — a selected dark palette,
      not an automatic flip of the light one. */
   --chart-1: #3987e5; /* blue */
@@ -268,14 +286,14 @@ body[data-app="admin"] {
   --chart-3: #d55181; /* magenta */
   --chart-4: #c98500; /* yellow */
   --chart-5: #9ca3af; /* neutral — reserved for "Other" */
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: oklch(0.205 0.04 265);
+  --sidebar-foreground: oklch(0.955 0.012 265);
+  --sidebar-primary: oklch(0.7 0.13 265);
+  --sidebar-primary-foreground: oklch(0.22 0.06 265);
+  --sidebar-accent: oklch(0.285 0.05 265);
+  --sidebar-accent-foreground: oklch(0.985 0.008 265);
+  --sidebar-border: oklch(0.4 0.05 265);
+  --sidebar-ring: oklch(0.66 0.13 262);
 }
 
 @layer base {

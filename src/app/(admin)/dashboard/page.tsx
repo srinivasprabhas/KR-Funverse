@@ -6,8 +6,11 @@ import { format, parseISO } from "date-fns";
 import {
   BanknoteIcon,
   CalendarCheckIcon,
+  CalendarRangeIcon,
+  GamepadIcon,
   PlusIcon,
   RecycleIcon,
+  TicketIcon,
   TrendingUpIcon,
   WalletIcon,
 } from "lucide-react";
@@ -81,7 +84,7 @@ export default function OverviewPage() {
       upcoming: upcomingToday(
         state.bookings,
         today,
-        new Date().toTimeString().slice(0, 5)
+        new Date().toTimeString().slice(0, 5),
       ),
       todayCount: todays.filter((b) => b.status !== "cancelled").length,
     };
@@ -133,24 +136,28 @@ export default function OverviewPage() {
           value={todayTotals.bookings}
           hint={`${formatMoney(todayTotals.revenue)} booked value`}
           icon={CalendarCheckIcon}
+          iconClassName="text-chart-1"
         />
         <StatCard
           label="Advance collected"
           value={formatMoney(todayTotals.collected)}
           hint="Today, across all games"
           icon={WalletIcon}
+          iconClassName="text-status-paid"
         />
         <StatCard
           label="Balance outstanding"
           value={formatMoney(todayTotals.outstanding)}
           hint="To collect at the venue today"
           icon={BanknoteIcon}
+          iconClassName="text-status-due"
         />
         <StatCard
           label="Resale rate"
           value={`${cancellations.resaleRate}%`}
           hint={`${cancellations.resold} of ${cancellations.cancelled} cancelled slots resold`}
           icon={RecycleIcon}
+          iconClassName="text-chart-3"
         />
       </div>
 
@@ -170,17 +177,100 @@ export default function OverviewPage() {
         </Card>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Revenue, last 14 days</CardTitle>
-          <CardDescription>
-            Advance collected versus balance still outstanding.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <RevenueTrendChart data={revenue} />
-        </CardContent>
-      </Card>
+      <div className="grid gap-4 lg:grid-cols-5">
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Revenue, last 14 days</CardTitle>
+            <CardDescription>
+              Advance collected versus balance still outstanding.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RevenueTrendChart data={revenue} />
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Quick actions</CardTitle>
+            <CardDescription>
+              Jump straight to the day&apos;s work.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <Button className="w-full" onClick={() => setDialogOpen(true)}>
+              <PlusIcon data-icon="inline-start" />
+              New booking
+            </Button>
+
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                {
+                  href: "/dashboard/slots",
+                  label: "Slots",
+                  icon: CalendarRangeIcon,
+                },
+                {
+                  href: "/dashboard/bookings",
+                  label: "Bookings",
+                  icon: TicketIcon,
+                },
+                { href: "/dashboard/games", label: "Games", icon: GamepadIcon },
+              ].map((l) => (
+                <Button
+                  key={l.href}
+                  variant="outline"
+                  size="sm"
+                  nativeButton={false}
+                  render={<Link href={l.href} />}
+                >
+                  <l.icon data-icon="inline-start" />
+                  {l.label}
+                </Button>
+              ))}
+            </div>
+
+            <Separator />
+
+            {/* Snapshot from data already computed above — no new selectors. */}
+            <div className="flex flex-col gap-2 text-sm">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-muted-foreground">Next slot</span>
+                {/* After the last slot of the day this would read "—" and look
+                    broken, so say so plainly instead. */}
+                <span className="font-medium tabular-nums">
+                  {upcoming[0]
+                    ? formatTime(upcoming[0].startTime)
+                    : "Day complete"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-muted-foreground">Bookings today</span>
+                <span className="font-medium tabular-nums">{todayCount}</span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-muted-foreground">
+                  Still to come today
+                </span>
+                <span className="font-medium tabular-nums">
+                  {upcoming.length}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-muted-foreground">Outstanding today</span>
+                <Money
+                  amount={todayTotals.outstanding}
+                  className={
+                    todayTotals.outstanding > 0
+                      ? "font-medium text-status-due"
+                      : "font-medium"
+                  }
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
@@ -250,7 +340,12 @@ export default function OverviewPage() {
                     {g.booked}/{g.capacity} · {g.rate}%
                   </span>
                 </div>
-                <Progress value={g.rate} />
+                {/* Neutral indicator: these bars sit beside the blue
+                    "Top games" chart and two rows of blue would compete. */}
+                <Progress
+                  value={g.rate}
+                  className="**:data-[slot=progress-indicator]:bg-muted-foreground"
+                />
               </div>
             ))}
           </CardContent>
@@ -339,7 +434,9 @@ export default function OverviewPage() {
                   className="flex items-center justify-between gap-3 py-2.5 text-left"
                 >
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium">{b.customerName}</span>
+                    <span className="text-sm font-medium">
+                      {b.customerName}
+                    </span>
                     <span className="text-xs text-muted-foreground">
                       {format(parseISO(b.date), "d MMM")} ·{" "}
                       {formatTime(b.startTime)}
