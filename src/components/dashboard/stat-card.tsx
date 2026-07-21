@@ -10,6 +10,7 @@ export function StatCard({
   value,
   hint,
   icon: Icon,
+  iconClassName,
   loading,
   className,
 }: {
@@ -17,6 +18,8 @@ export function StatCard({
   value: React.ReactNode;
   hint?: string;
   icon?: LucideIcon;
+  /** Per-metric tint, e.g. "text-chart-2". Defaults to neutral. */
+  iconClassName?: string;
   loading?: boolean;
   className?: string;
 }) {
@@ -26,7 +29,9 @@ export function StatCard({
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {label}
         </CardTitle>
-        {Icon ? <Icon className="size-4 text-muted-foreground" /> : null}
+        {Icon ? (
+          <Icon className={cn("size-4", iconClassName ?? "text-muted-foreground")} />
+        ) : null}
       </CardHeader>
       <CardContent className="flex flex-col gap-1">
         {loading ? (

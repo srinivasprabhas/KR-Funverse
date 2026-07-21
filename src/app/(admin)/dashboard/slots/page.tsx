@@ -2,7 +2,14 @@
 
 import * as React from "react";
 import { format, parseISO } from "date-fns";
-import { CalendarX2Icon, PlusIcon } from "lucide-react";
+import {
+  BanknoteIcon,
+  CalendarCheckIcon,
+  CalendarX2Icon,
+  PlusIcon,
+  TicketIcon,
+  WalletIcon,
+} from "lucide-react";
 
 import { PageShell } from "@/components/dashboard/page-shell";
 import { StatCard } from "@/components/dashboard/stat-card";
@@ -97,16 +104,6 @@ export default function SlotsPage() {
         </Button>
       }
     >
-      <FilterBar>
-        <DatePicker value={date} onChange={setDate} />
-        <GameSelect
-          games={activeGames}
-          value={gameId}
-          onChange={setGameId}
-          className="min-w-40"
-        />
-      </FilterBar>
-
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <StatCard
           label="Slots booked"
@@ -116,19 +113,41 @@ export default function SlotsPage() {
               ? `${Math.round((bookedCount / cells.length) * 100)}% of the day filled`
               : "No active slots"
           }
+          icon={CalendarCheckIcon}
+          iconClassName="text-chart-1"
         />
-        <StatCard label="Bookings" value={uniqueBookings.length} hint="On this date" />
+        <StatCard
+          label="Bookings"
+          value={uniqueBookings.length}
+          hint="On this date"
+          icon={TicketIcon}
+          iconClassName="text-chart-3"
+        />
         <StatCard
           label="Advance collected"
           value={formatMoney(uniqueBookings.reduce((s, b) => s + b.advance, 0))}
           hint="Already received"
+          icon={WalletIcon}
+          iconClassName="text-status-paid"
         />
         <StatCard
           label="Balance due"
           value={formatMoney(uniqueBookings.reduce((s, b) => s + balanceOf(b), 0))}
           hint="To collect at venue"
+          icon={BanknoteIcon}
+          iconClassName="text-status-due"
         />
       </div>
+
+      <FilterBar>
+        <DatePicker value={date} onChange={setDate} />
+        <GameSelect
+          games={activeGames}
+          value={gameId}
+          onChange={setGameId}
+          className="min-w-40"
+        />
+      </FilterBar>
 
       {!game || courts.length === 0 ? (
         <Empty>

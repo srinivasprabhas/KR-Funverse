@@ -21,7 +21,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 import { ResetDemoButton } from "@/components/dashboard/reset-demo-button";
 
 const NAV = [
@@ -40,12 +39,14 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              {/* Sidebar-scoped tokens: the global primary/muted would be
+                  near-invisible against the navy sidebar surface. */}
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <span className="text-sm font-semibold">KR</span>
               </div>
               <div className="grid flex-1 text-left leading-tight">
                 <span className="truncate font-semibold">KR Funverse</span>
-                <span className="truncate text-xs text-muted-foreground">
+                <span className="truncate text-xs text-sidebar-foreground/70">
                   Booking admin
                 </span>
               </div>
@@ -85,9 +86,6 @@ export function AppSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <ThemeToggle />
-          </SidebarMenuItem>
           <SidebarMenuItem>
             <ResetDemoButton />
           </SidebarMenuItem>
